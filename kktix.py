@@ -1,4 +1,3 @@
-
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
@@ -16,29 +15,26 @@ import sys
 # 先開 cmd 輸入下面指令
 # /Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --remote-debugging-port=9527 --user-data-dir="~/ChromeProfile"
 
+# 設定參數
+url = "https://kktix.com/events/932ce4db-01ajfsj/registrations/new?_gl=1*sgbxnm*_ga*NDQ2MTgwMDQuMTcyNDMzNDM0NQ..*_ga_SYRTJY65JB*MTcyNDk4OTk3Ny40LjEuMTcyNDk5MDcxMS42MC4wLjA.*MjAxMjQ1MDM3NC4xNzI0MDcyOTQ2*_ga_SYRTJY65JB*MTcyNDIzNjM2OC40LjEuMTcyNDIzNzk3Mi4zMC4wLjA."
+qty = 2  # 設定的票數量
 
 options = Options()
 options.add_experimental_option("debuggerAddress", "localhost:9527")
 browser = webdriver.Chrome(options=options)
 # browser = webdriver.Chrome()
 
-#直接購票網址可以選座位票數的那個網址
-browser.get('https://kktix.com/events/932ce4db-01ajfsj/registrations/new?_gl=1*sgbxnm*_ga*NDQ2MTgwMDQuMTcyNDMzNDM0NQ..*_ga_SYRTJY65JB*MTcyNDk4OTk3Ny40LjEuMTcyNDk5MDcxMS42MC4wLjA.\
-            *MjAxMjQ1MDM3NC4xNzI0MDcyOTQ2*_ga_SYRTJY65JB*MTcyNDIzNjM2OC40LjEuMTcyNDIzNzk3Mi4zMC4wLjA.')
+# 直接購票網址可以選座位票數的那個網址
+browser.get(url)
 #print(browser.title)
-
 
 # 等待页面加载
 #time.sleep(0.5)  # 根据需要调整等待时间
 
-
-
-
-
 try:
     # 找到class="display-table" 的ID 要改
     ticket_div = browser.find_element(By.ID, 'ticket_772691')
-    
+
     if ticket_div:
         # 找到input元素
         input_element = ticket_div.find_element(By.CSS_SELECTOR, 'input[type="text"]')
@@ -46,12 +42,12 @@ try:
         if input_element:
             # 修改value属性
             input_element.clear()  # 清空当前值
-            input_element.send_keys('2')  # 輸入張數要更改數字
-            #time.sleep(0.5) 
+            input_element.send_keys(str(qty))  # 輸入張數要更改數字
+            #time.sleep(0.5)
             # 找到同意条款的复选框并点击
             check_box = browser.find_element(By.ID, value="person_agree_terms").click()
-        
-            #time.sleep(0.5) 
+
+            #time.sleep(0.5)
             # 查找並點擊 "下一步" 或 "電腦配位" 按鈕
             button_texts_to_find = ["下一步", "電腦配位"]
             buttons = browser.find_elements(By.TAG_NAME, "button")
